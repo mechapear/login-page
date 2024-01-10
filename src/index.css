@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+    @apply bg-gradient-to-r from-[#7878fc] from-10% via-[#ffd255] via-50% to-[#fc6287] to-90% p-4;
+}

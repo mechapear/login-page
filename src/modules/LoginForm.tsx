@@ -85,13 +85,13 @@ export default function LoginForm() {
 
         <div className="text-center">
           <p className="mb-4 text-sm text-gray-600">or continue with</p>
-          <button className="mx-1 rounded-full border border-gray-200 px-8 py-2 hover:border-blue-700">
+          <button className="mr-1 rounded-full border border-gray-200 px-6 py-2 hover:border-blue-700 md:mx-1 md:px-8">
             <GoogleIcon />
           </button>
-          <button className="mx-1 rounded-full border border-gray-200 px-8 py-2 hover:border-blue-700">
+          <button className="mr-1 rounded-full border border-gray-200 px-6 py-2 hover:border-blue-700 md:mx-1 md:px-8">
             <GithubIcon />
           </button>
-          <button className="mx-1 rounded-full border border-gray-200 px-8 py-2 hover:border-blue-700">
+          <button className="rounded-full border border-gray-200 px-6 py-2 hover:border-blue-700 md:mx-1 md:px-8">
             <FacebookIcon />
           </button>
         </div>
@@ -99,7 +99,7 @@ export default function LoginForm() {
         <div className="text-center text-sm text-gray-600">
           <p>
             Don't have an account yet? &nbsp;
-            <a href="#" className="text-blue-500 hover:underline">
+            <a href="#" className="block text-blue-500 hover:underline md:inline-block">
               Sign up here!
             </a>
           </p>
