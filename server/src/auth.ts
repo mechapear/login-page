@@ -15,7 +15,7 @@ export function validateUserLogin(
 
 type LoginResponse = {
   isSuccess: boolean
-  message: string
+  code: 'SUCCESS' | 'INVALID_CREDENTIALS'
 }
 
 type LoginBody = {
@@ -39,13 +39,13 @@ export async function handleLogin(
     // HTTP status 200 OK
     response.status(200).json({
       isSuccess: true,
-      message: 'Login successful',
+      code: 'SUCCESS',
     })
   } else {
     // HTTP status 401 Unauthorized
     response.status(401).json({
       isSuccess: false,
-      message: 'Invalid login',
+      code: 'INVALID_CREDENTIALS',
     })
   }
 }
