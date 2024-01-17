@@ -1,4 +1,11 @@
-export default function SuccessPage() {
+import { FileRoute } from '@tanstack/react-router'
+
+// create routes other than the root route using the 'FileRoute' class
+export const Route = new FileRoute('/').createRoute({
+  component: SuccessLogin,
+})
+
+function SuccessLogin() {
   return (
     <>
       <section className="m-2 grid place-content-center place-items-center md:m-8">
@@ -18,7 +25,7 @@ export default function SuccessPage() {
           <div className="grid place-items-end">
             <img
               src="/asset/image2.png"
-              alt=""
+              alt="login success image"
               className="h-auto max-h-[360px] max-w-full"
             />
           </div>

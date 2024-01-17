@@ -13,6 +13,7 @@ module.exports = {
     '.prettierrc.cjs',
     'tailwind.config.cjs',
     'postcss.config.cjs',
+    'routeTree.gen.ts',
   ],
   parser: '@typescript-eslint/parser',
   plugins: ['react-refresh', 'import', 'unused-imports'],

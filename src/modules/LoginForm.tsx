@@ -1,17 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useNavigate } from '@tanstack/react-router'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import {
-  ErrorIcon,
-  FacebookIcon,
-  GithubIcon,
-  GoogleIcon,
-} from '../modules/icons.tsx'
-
-export type Inputs = {
-  email: string
-  password: string
-}
+import { ErrorIcon, FacebookIcon, GithubIcon, GoogleIcon } from './icons.tsx'
 
 const loginSchema = z
   .object({
@@ -37,6 +28,8 @@ export default function LoginForm() {
   } = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
   })
+  // navigate to a route from a side-effect
+  const navigate = useNavigate({ from: '/' })
 
   const onSubmit = async (userInput: LoginSchema) => {
     // send userInput to server
@@ -49,12 +42,25 @@ export default function LoginForm() {
         body: JSON.stringify(userInput),
       }).then((res) => res.json() as Promise<LoginResponse>)
 
+      // handle success login
+      if (loginResult.isSuccess) {
+        // navigate to index page which is a success login page
+        navigate({ to: '/' })
+        return
+      }
+
+      // handle invalid credentials
       setError('root.serverError', {
         type: loginResult.code,
       })
     } catch (error) {
       // for debugging
       console.error({ error })
+
+      // handle internet error
+      setError('root.serverError', {
+        type: 'INTERNET_ERROR',
+      })
     }
   }
 
@@ -120,6 +126,16 @@ export default function LoginForm() {
             </div>
           )}
 
+          {/* internet error */}
+          {errors.root?.serverError.type === 'INTERNET_ERROR' && (
+            <div className="mb-5 mt-2 w-full rounded-lg border border-red-500 bg-red-50 px-3 py-2.5 text-red-500">
+              <ErrorIcon />
+              <span className="pl-1 text-sm">
+                Please check your internet and try again.
+              </span>
+            </div>
+          )}
+
           <div className="text-center">
             <button
               type="submit"
@@ -130,6 +146,10 @@ export default function LoginForm() {
 
             <a
               href="#"
+              onClick={(event) => {
+                event.preventDefault()
+                alert("You're redirecting to the reset password page")
+              }}
               className="mt-3 block text-sm text-gray-600 hover:text-blue-500 hover:underline"
             >
               forgot password?
@@ -165,6 +185,10 @@ export default function LoginForm() {
             Don't have an account yet? &nbsp;
             <a
               href="#"
+              onClick={(event) => {
+                event.preventDefault()
+                alert("You're redirecting to the sign up page")
+              }}
               className="block text-blue-500 hover:underline md:inline-block"
             >
               Sign up here!
