@@ -1,13 +1,14 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigate } from '@tanstack/react-router'
 import { useForm } from 'react-hook-form'
+import Cookies from 'universal-cookie'
 import { z } from 'zod'
 import { ErrorIcon, FacebookIcon, GithubIcon, GoogleIcon } from './icons.tsx'
 
 const loginSchema = z
   .object({
     email: z.string().min(1, 'Email is required').email('Invalid email format'),
-    password: z.string().min(8, "Password can't be less than 10 characters"),
+    password: z.string().min(10, "Password can't be less than 10 characters"),
   })
   .required()
 
@@ -17,6 +18,7 @@ export type LoginSchema = z.infer<typeof loginSchema>
 export type LoginResponse = {
   isSuccess: boolean
   code: 'SUCCESS' | 'INVALID_CREDENTIALS'
+  sessionToken?: string
 }
 
 export default function LoginForm() {
@@ -40,13 +42,18 @@ export default function LoginForm() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(userInput),
-      }).then((res) => res.json() as Promise<LoginResponse>)
+      }).then((res) => {
+        return res.json() as Promise<LoginResponse>
+      })
 
       // handle success login
       if (loginResult.isSuccess) {
+        // save token to cookie
+        const cookies = new Cookies()
+        cookies.set('session-token', loginResult.sessionToken)
+
         // navigate to index page which is a success login page
-        navigate({ to: '/' })
-        return
+        return navigate({ to: '/' })
       }
 
       // handle invalid credentials
@@ -55,10 +62,10 @@ export default function LoginForm() {
       })
     } catch (error) {
       // for debugging
-      console.error({ error })
+      console.error('LoginForm / onSubmit error', { error })
 
       // handle internet error
-      setError('root.serverError', {
+      setError('root.internetError', {
         type: 'INTERNET_ERROR',
       })
     }
@@ -127,7 +134,7 @@ export default function LoginForm() {
           )}
 
           {/* internet error */}
-          {errors.root?.serverError.type === 'INTERNET_ERROR' && (
+          {errors.root?.internetError.type === 'INTERNET_ERROR' && (
             <div className="mb-5 mt-2 w-full rounded-lg border border-red-500 bg-red-50 px-3 py-2.5 text-red-500">
               <ErrorIcon />
               <span className="pl-1 text-sm">

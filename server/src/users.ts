@@ -11,29 +11,29 @@ export type User = {
 const users: User[] = [
   {
     id: 1,
-    firstName: 'JOHN',
-    lastName: 'DOE',
+    firstName: 'John',
+    lastName: 'Doe',
     email: 'john@gmail.com',
     password: await hashPassword('john123456'),
   },
   {
     id: 2,
-    firstName: 'JANE',
-    lastName: 'DOE',
+    firstName: 'Jane',
+    lastName: 'Doe',
     email: 'jane@gmail.com',
     password: await hashPassword('jane123456'),
   },
   {
     id: 3,
-    firstName: 'JAMES',
-    lastName: 'SMITH',
+    firstName: 'James',
+    lastName: 'Smith',
     email: 'james@gmail.com',
     password: await hashPassword('james123456'),
   },
   {
     id: 4,
-    firstName: 'MARY',
-    lastName: 'SMITH',
+    firstName: 'Mary',
+    lastName: 'Smith',
     email: 'mery@gmail.com',
     password: await hashPassword('mary123456'),
   },
@@ -42,6 +42,11 @@ const users: User[] = [
 // get the user object from the database based on the provided email
 export function getUserByEmail(email: string): User | undefined {
   return users.find((user) => user.email === email)
+}
+
+// get the user object from the database based on the provided id
+export function getUserById(id: number): User | undefined {
+  return users.find((user) => user.id === id)
 }
 
 export function hashPassword(password: string): Promise<string> {

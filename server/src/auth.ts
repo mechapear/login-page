@@ -1,5 +1,6 @@
 import bcryptjs from 'bcryptjs'
 import { Request, Response } from 'express'
+import { createSessionToken } from './session.js'
 import { getUserByEmail, User } from './users.ts'
 
 export function validateUserLogin(
@@ -13,10 +14,16 @@ export function validateUserLogin(
   return bcryptjs.compare(password, storedHashedPassword)
 }
 
-type LoginResponse = {
-  isSuccess: boolean
-  code: 'SUCCESS' | 'INVALID_CREDENTIALS'
-}
+type LoginResponse =
+  | {
+      isSuccess: true
+      code: 'SUCCESS'
+      sessionToken: string
+    }
+  | {
+      isSuccess: false
+      code: 'INVALID_CREDENTIALS'
+    }
 
 type LoginBody = {
   email: string
@@ -35,11 +42,16 @@ export async function handleLogin(
   // compare password with the stored hashed password
   const isPasswordValid = await validateUserLogin(user, password)
 
-  if (isPasswordValid) {
+  if (user && isPasswordValid) {
+    const sessionToken = createSessionToken(user.id)
+
     // HTTP status 200 OK
     response.status(200).json({
       isSuccess: true,
       code: 'SUCCESS',
+      // return session token to the client
+      // so that it can be set in cookie
+      sessionToken,
     })
   } else {
     // HTTP status 401 Unauthorized
