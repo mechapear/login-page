@@ -1,5 +1,5 @@
 {
-  "name": "bun-project-template",
+  "name": "login-page",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --fix",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "run-server": "node --loader ts-node/esm server/src/server.ts"
   },
   "dependencies": {
     "@tanstack/react-router": "^1.4.9",
